@@ -1,0 +1,202 @@
+import 'package:flutter/material.dart';
+import '../navigation/app_drawer.dart'; // Importa el drawer de navegación personalizado
+
+// Widget de estado mutable para la Práctica 2 (Agregar elementos dinámicamente)
+class Practice2 extends StatefulWidget {
+  const Practice2({super.key}); // Constructor con clave opcional
+
+  @override
+  State<Practice2> createState() => _Practice2State(); // Crea el estado asociado
+}
+
+// Estado de la Práctica 2 que maneja la lógica de agregar/eliminar elementos
+class _Practice2State extends State<Practice2> {
+  List<String> items = []; // Lista para almacenar los textos "Hola Mundo"
+  int count = 1; // Contador para numerar los elementos
+  final int maxItems = 10; // Límite máximo de elementos permitidos
+
+  // Método para agregar un nuevo "Hola Mundo" a la lista
+  void addHelloWorld() {
+    setState(() { // Notifica a Flutter que el estado ha cambiado
+      if (items.length < maxItems) { // Verifica que no se exceda el límite
+        items.add('Hola Mundo $count'); // Agrega el nuevo elemento numerado
+        count++; // Incrementa el contador para el próximo elemento
+
+        // Muestra un SnackBar de confirmación al usuario
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Agregado: Hola Mundo ${count - 1}'), // Mensaje con el número agregado
+            duration: const Duration(seconds: 1), // Duración corta del mensaje
+          ),
+        );
+      } else {
+        // Muestra mensaje de error cuando se alcanza el límite
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('¡Límite alcanzado! Máximo 10 elementos'),
+            backgroundColor: Colors.orange, // Color naranja para advertencia
+            duration: Duration(seconds: 2), // Duración más larga para mensaje importante
+          ),
+        );
+      }
+    });
+  }
+
+  // Método para limpiar toda la lista
+  void clearAll() {
+    setState(() {
+      items.clear(); // Elimina todos los elementos de la lista
+      count = 1; // Reinicia el contador a 1
+
+      // Muestra SnackBar de confirmación de limpieza
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Todos los elementos eliminados'),
+          backgroundColor: Colors.red, // Color rojo para acción destructiva
+          duration: Duration(seconds: 1),
+        ),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Estructura principal de la pantalla
+    return Scaffold(
+      // Barra de aplicación superior con acciones
+      appBar: AppBar(
+        title: const Text('Práctica 2: Agregar Hola Mundos'), // Título descriptivo
+        automaticallyImplyLeading: true, // Muestra el botón de retroceso
+        actions: [ // Botones adicionales en la AppBar
+          // Botón para limpiar toda la lista
+          IconButton(
+            icon: const Icon(Icons.clear_all), // Ícono de limpiar
+            onPressed: clearAll, // Asigna la función de limpieza
+            tooltip: 'Limpiar toda la lista', // Texto informativo al mantener presionado
+          ),
+          // Contador visible en la AppBar
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Text(
+                '$count/10', // Muestra el contador actual/máximo
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ],
+      ),
+      drawer: const AppDrawer(), // Panel de navegación lateral
+      
+      // Cuerpo condicional: muestra mensaje vacío o lista con elementos
+      body: items.isEmpty
+          ? // Estado VACÍO - Pantalla de bienvenida/instructiva
+          const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center, // Centrado vertical
+                children: [
+                  Icon(Icons.add_circle_outline, size: 60, color: Colors.grey), // Ícono de agregar
+                  SizedBox(height: 16), // Espacio entre ícono y texto
+                  Text(
+                    'No hay elementos\nPresiona el botón + para agregar', // Mensaje instructivo
+                    textAlign: TextAlign.center, // Texto centrado
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  SizedBox(height: 8), // Espacio pequeño
+                  Text(
+                    'Máximo 10 elementos', // Recordatorio del límite
+                    style: TextStyle(fontSize: 14, color: Colors.orange), // Color naranja para advertencia
+                  ),
+                ],
+              ),
+            )
+          : // Estado CON ELEMENTOS - Lista y controles
+          Column(
+            children: [
+              // Barra de progreso que muestra el avance hacia el límite
+              LinearProgressIndicator(
+                value: items.length / maxItems, // Progreso como fracción (0.0 a 1.0)
+                backgroundColor: Colors.grey[300], // Fondo gris claro
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  items.length == maxItems ? Colors.orange : Colors.blue, // Naranja si está lleno, azul si no
+                ),
+              ),
+              // Lista expandible de elementos
+              Expanded(
+                child: ListView.builder(
+                  itemCount: items.length, // Número de elementos a mostrar
+                  itemBuilder: (context, index) => Card( // Constructor de tarjetas para cada elemento
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4), // Margen entre tarjetas
+                    child: ListTile(
+                      leading: CircleAvatar( // Avatar circular con número
+                        backgroundColor: Colors.blue, // Fondo azul
+                        child: Text(
+                          '${index + 1}', // Número del elemento (comienza en 1)
+                          style: const TextStyle(color: Colors.white), // Texto blanco para contraste
+                        ),
+                      ),
+                      title: Text(
+                        items[index], // Texto "Hola Mundo X"
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      trailing: IconButton( // Botón para eliminar elemento individual
+                        icon: const Icon(Icons.delete, color: Colors.red), // Ícono de eliminar en rojo
+                        onPressed: () { // Función para eliminar el elemento específico
+                          setState(() {
+                            items.removeAt(index); // Elimina el elemento en la posición del índice
+                            // Reorganiza los números si se elimina un elemento del medio
+                            if (index < items.length) {
+                              for (int i = index; i < items.length; i++) {
+                                items[i] = 'Hola Mundo ${i + 1}'; // Renumera los elementos restantes
+                              }
+                              count = items.length + 1; // Actualiza el contador para el próximo elemento
+                            } else {
+                              count--; // Si se elimina el último, simplemente decrementa
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // Contador inferior con información del estado
+              Container(
+                padding: const EdgeInsets.all(16.0), // Espaciado interno
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Espaciado entre los textos
+                  children: [
+                    // Contador de elementos actual/máximo
+                    Text(
+                      'Elementos: ${items.length}/$maxItems',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: items.length == maxItems ? Colors.orange : Colors.blue, // Color condicional
+                      ),
+                    ),
+                    // Mensaje de advertencia solo cuando se alcanza el límite
+                    if (items.length == maxItems)
+                      const Text(
+                        '¡Límite alcanzado!',
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+      
+      // Botón flotante para agregar nuevos elementos
+      floatingActionButton: FloatingActionButton(
+        onPressed: items.length < maxItems ? addHelloWorld : null, // Habilitado solo si hay espacio
+        tooltip: items.length < maxItems ? 'Agregar Hola Mundo' : 'Límite alcanzado', // Texto informativo
+        backgroundColor: items.length < maxItems ? Colors.blue : Colors.grey, // Color condicional
+        child: const Icon(Icons.add), // Ícono de agregar
+      ),
+    );
+  }
+}
