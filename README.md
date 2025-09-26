@@ -24,6 +24,9 @@ AppHub Portfolio es una aplicación móvil desarrollada en Flutter que sirve com
   ![Imagen de WhatsApp 2025-09-26 a las 01 01 57_7e71b326](https://github.com/user-attachments/assets/26c247da-fd0d-44ca-8d87-c5f2f57a8dbf)
 
 - **🛠️ Kit Offline**: 4 módulos funcionales sin necesidad de conexión
+  <img width="1344" height="708" alt="image" src="https://github.com/user-attachments/assets/b57fb503-1661-4346-ac36-cd9d85032ca1" />
+  <img width="1360" height="723" alt="image" src="https://github.com/user-attachments/assets/f21aeb93-54f3-495f-8ea4-140cf04a5e1f" />
+
   
 - **🎨 UI Consistente**: Diseño material design con tema claro/oscuro
   ![Imagen de WhatsApp 2025-09-26 a las 01 03 11_0f4ecd59](https://github.com/user-attachments/assets/0c60544c-52ec-4fd7-8451-286a6af640ef)
