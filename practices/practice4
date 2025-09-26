@@ -1,0 +1,187 @@
+import 'package:flutter/material.dart';
+import '../main.dart';
+import '../navigation/app_drawer.dart'; // ← Importación del drawer de navegación
+
+// Widget con estado para el juego Piedra, Papel o Tijera
+class Practice4 extends StatefulWidget {
+  const Practice4({super.key});
+
+  @override
+  State<Practice4> createState() => _Practice4State();
+}
+
+class _Practice4State extends State<Practice4> {
+  // Variables para el juego
+  String userChoice = '';       // Elección del usuario
+  String appChoice = '';        // Elección de la app (CPU)
+  String result = '';           // Resultado del juego
+  int userScore = 0;            // Puntuación del usuario
+  int appScore = 0;             // Puntuación de la app
+
+  // Opciones disponibles en el juego
+  final List<String> options = ['Piedra', 'Papel', 'Tijera'];
+
+  // Función principal del juego
+  void playGame(String userSelection) {
+    // Genera elección aleatoria de la app usando el tiempo actual
+    final randomIndex = DateTime.now().millisecond % options.length;
+    final appSelection = options[randomIndex];
+
+    // Determinar el resultado basado en las reglas del juego
+    String gameResult;
+    if (userSelection == appSelection) {
+      gameResult = 'Empate';  // Misma elección = empate
+    } else if ((userSelection == 'Piedra' && appSelection == 'Tijera') ||
+        (userSelection == 'Papel' && appSelection == 'Piedra') ||
+        (userSelection == 'Tijera' && appSelection == 'Papel')) {
+      gameResult = '¡Ganaste!';  // Combinaciones ganadoras
+      userScore++;  // Incrementa puntuación del usuario
+    } else {
+      gameResult = 'Perdiste';  // Cualquier otra combinación = pierde
+      appScore++;   // Incrementa puntuación de la app
+    }
+
+    // Actualiza la interfaz con los nuevos valores
+    setState(() {
+      userChoice = userSelection;
+      appChoice = appSelection;
+      result = gameResult;
+    });
+  }
+
+  // Reinicia todas las variables del juego
+  void resetScores() {
+    setState(() {
+      userScore = 0;
+      appScore = 0;
+      userChoice = '';
+      appChoice = '';
+      result = '';
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Piedra, Papel o Tijera'),
+        automaticallyImplyLeading: true, // Muestra el ícono de hamburguesa
+        actions: [
+          // Botón para reiniciar el marcador
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: resetScores,
+            tooltip: 'Reiniciar marcador',
+          ),
+        ],
+      ),
+      drawer: const AppDrawer(),  // Drawer de navegación
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Sección del marcador
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                // Marcador del usuario
+                Column(
+                  children: [
+                    const Text('TÚ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    Text('$userScore', style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                // Marcador de la app
+                Column(
+                  children: [
+                    const Text('APP', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    Text('$appScore', style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 40),  // Espaciador
+
+            // Muestra las elecciones y resultado solo si el usuario ya jugó
+            if (userChoice.isNotEmpty) ...[
+              Text('Elegiste: $userChoice', style: const TextStyle(fontSize: 18)),
+              Text('La app eligió: $appChoice', style: const TextStyle(fontSize: 18)),
+              const SizedBox(height: 20),
+              // Muestra el resultado con color según si ganó, perdió o empató
+              Text(
+                result,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: result == '¡Ganaste!'
+                      ? Colors.green
+                      : result == 'Perdiste'
+                      ? Colors.red
+                      : Colors.orange,
+                ),
+              ),
+              const SizedBox(height: 40),
+            ],
+
+            // Botones para elegir Piedra, Papel o Tijera
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ChoiceButton(
+                  icon: Icons.landscape,    // Ícono de piedra
+                  text: 'Piedra',
+                  onPressed: () => playGame('Piedra'),
+                ),
+                ChoiceButton(
+                  icon: Icons.description,  // Ícono de papel
+                  text: 'Papel',
+                  onPressed: () => playGame('Papel'),
+                ),
+                ChoiceButton(
+                  icon: Icons.content_cut,  // Ícono de tijera
+                  text: 'Tijera',
+                  onPressed: () => playGame('Tijera'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Widget personalizado para los botones de elección
+class ChoiceButton extends StatelessWidget {
+  final IconData icon;        // Ícono del botón
+  final String text;          // Texto del botón
+  final VoidCallback onPressed; // Función al presionar
+
+  const ChoiceButton({
+    super.key,
+    required this.icon,
+    required this.text,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Botón con ícono grande
+        IconButton(
+          icon: Icon(icon, size: 40),
+          onPressed: onPressed,
+          style: IconButton.styleFrom(
+            backgroundColor: Colors.blue,  // Fondo azul
+            foregroundColor: Colors.white, // Ícono blanco
+            padding: const EdgeInsets.all(16),
+          ),
+        ),
+        const SizedBox(height: 8),  // Espacio entre ícono y texto
+        Text(text),  // Texto descriptivo
+      ],
+    );
+  }
+}
