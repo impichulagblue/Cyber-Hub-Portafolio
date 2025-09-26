@@ -71,6 +71,3 @@ AppHub Portfolio es una aplicación móvil desarrollada en Flutter que sirve com
 flutter pub get
 flutter run
 flutter build apk
-
-Pantalla de inicio:
-![Imagen de WhatsApp 2025-09-26 a las 00 49 10_ec1f3cc4](https://github.com/user-attachments/assets/a2f94add-dd84-4d38-8895-d34cece583b9)
