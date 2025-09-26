@@ -1,0 +1,114 @@
+import 'package:flutter/material.dart';
+import '../navigation/app_drawer.dart'; // Importa el drawer de navegación personalizado
+
+// Widget de estado mutable para la Práctica 1
+class Practice1 extends StatefulWidget {
+  const Practice1({super.key}); // Constructor con clave opcional
+
+  @override
+  State<Practice1> createState() => _Practice1State(); // Crea el estado asociado
+}
+
+// Estado de la Práctica 1 que maneja la lógica de mostrar/ocultar
+class _Practice1State extends State<Practice1> {
+  List<String> items = []; // Lista para almacenar los textos "Hola Mundo"
+  bool isShowing = false; // Bandera para controlar si se están mostrando los elementos
+
+  // Método para alternar entre mostrar y ocultar los "Hola Mundo"
+  void toggleHelloWorlds() {
+    setState(() { // Notifica a Flutter que el estado ha cambiado
+      if (isShowing) {
+        // Modo OCULTAR: limpia la lista y actualiza el estado
+        items.clear(); // Elimina todos los elementos de la lista
+        isShowing = false; // Actualiza la bandera a falso (oculto)
+      } else {
+        // Modo MOSTRAR: genera 10 "Hola Mundo" y actualiza el estado
+        items = List.generate(10, (index) => 'Hola Mundo ${index + 1}'); // Genera 10 textos numerados
+        isShowing = true; // Actualiza la bandera a verdadero (mostrando)
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Estructura principal de la pantalla
+    return Scaffold(
+      // Barra de aplicación superior
+      appBar: AppBar(
+        title: const Text('Práctica 1: Mostrar/Ocultar 10 Hola Mundos'), // Título descriptivo
+        automaticallyImplyLeading: true, // Muestra el botón de retroceso automáticamente
+      ),
+      drawer: const AppDrawer(), // Panel de navegación lateral
+      // Cuerpo de la pantalla organizado en columna
+      body: Column(
+        children: [
+          // Contenedor del botón principal
+          Padding(
+            padding: const EdgeInsets.all(20.0), // Espaciado alrededor del botón
+            child: SizedBox(
+              width: double.infinity, // Ancho completo disponible
+              height: 60, // Altura fija para el botón
+              child: ElevatedButton(
+                onPressed: toggleHelloWorlds, // Asigna la función al evento de presión
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isShowing ? Colors.red : Colors.green, // Color dinámico: rojo (ocultar) o verde (mostrar)
+                  foregroundColor: Colors.white, // Color del texto blanco
+                ),
+                child: Text(
+                  isShowing ? 'OCULTAR LOS 10' : 'MOSTRAR LOS 10', // Texto dinámico según el estado
+                  style: const TextStyle(fontSize: 18), // Tamaño de fuente grande
+                ),
+              ),
+            ),
+          ),
+          
+          // Área de contenido expandible (lista o mensaje vacío)
+          Expanded(
+            child: items.isEmpty // Condicional: si la lista está vacía
+                ? // Widget para estado VACÍO (lista oculta)
+                const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center, // Centrado vertical
+                      children: [
+                        Icon(Icons.visibility_off, size: 50, color: Colors.grey), // Ícono de "no visible"
+                        SizedBox(height: 10), // Espacio entre ícono y texto
+                        Text(
+                          'Presiona el botón para mostrar\nlos 10 Hola Mundos', // Mensaje instructivo
+                          textAlign: TextAlign.center, // Texto centrado
+                          style: TextStyle(fontSize: 16, color: Colors.grey), // Estilo gris y tamaño medio
+                        ),
+                      ],
+                    ),
+                  )
+                : // Widget para estado CON ELEMENTOS (lista visible)
+                ListView.builder(
+                    itemCount: items.length, // Número de elementos en la lista
+                    itemBuilder: (context, index) => Card( // Constructor de tarjetas para cada elemento
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4), // Margen entre tarjetas
+                      child: ListTile(
+                        leading: CircleAvatar( // Avatar circular con número
+                          child: Text('${index + 1}'), // Número del elemento (1-10)
+                        ),
+                        title: Text(
+                          items[index], // Texto "Hola Mundo X"
+                          style: const TextStyle(fontSize: 16), // Tamaño de fuente normal
+                        ),
+                        trailing: const Icon(Icons.text_format), // Ícono lateral de texto
+                      ),
+                    ),
+                  ),
+          ),
+          
+          // Contador de elementos en la parte inferior
+          Padding(
+            padding: const EdgeInsets.all(16.0), // Espaciado alrededor del texto
+            child: Text(
+              'Elementos mostrados: ${items.length}/10', // Texto con contador dinámico
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), // Texto en negrita
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
