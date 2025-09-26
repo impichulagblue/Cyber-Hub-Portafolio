@@ -18,37 +18,23 @@ AppHub Portfolio es una aplicación móvil desarrollada en Flutter que sirve com
 ### 🎯 Características Principales
 
 - **🏠 Hub Centralizado**: Navegación unificada con Drawer y rutas
+  ![Imagen de WhatsApp 2025-09-26 a las 00 49 32_8b838bed](https://github.com/user-attachments/assets/6c4f8321-9a21-4262-b08a-9d3d5dce9c5f)
+
 - **📚 Portfolio de Prácticas**: Integración de 4 prácticas anteriores
+  ![Imagen de WhatsApp 2025-09-26 a las 01 01 57_7e71b326](https://github.com/user-attachments/assets/26c247da-fd0d-44ca-8d87-c5f2f57a8dbf)
+
 - **🛠️ Kit Offline**: 4 módulos funcionales sin necesidad de conexión
+  
 - **🎨 UI Consistente**: Diseño material design con tema claro/oscuro
+  ![Imagen de WhatsApp 2025-09-26 a las 01 03 11_0f4ecd59](https://github.com/user-attachments/assets/0c60544c-52ec-4fd7-8451-286a6af640ef)
+  ![Imagen de WhatsApp 2025-09-26 a las 01 03 12_8dd769b0](https://github.com/user-attachments/assets/aebf694c-fb54-4088-b5a8-991a9f66a398)
+
 - **💾 Estado en Memoria**: Gestión local sin bases de datos externas
+  ![Imagen de WhatsApp 2025-09-26 a las 01 03 12_064191cc](https://github.com/user-attachments/assets/63e3916a-918a-4604-8d0f-911296babafd)
+
 
 ## 🏗️ Arquitectura del Proyecto
-lib/
-├── main.dart # Punto de entrada de la aplicación
-├── hub/ # Pantalla principal del hub
-│ └── hub_screen.dart
-├── navigation/ # Sistema de navegación
-│ └── app_drawer.dart
-├── practices/ # Prácticas integradas
-│ ├── practices_index_screen.dart
-│ ├── practice1.dart # Mostrar/ocultar 10 elementos
-│ ├── practice2.dart # Agregar elementos incrementalmente
-│ ├── practice3.dart # Formulario de registro con validaciones
-│ └── practice4.dart # Juego Piedra, Papel o Tijera
-├── project/ # Kit Offline - Módulos principales
-│ ├── kit_offline_screen.dart
-│ ├── notes/ # Módulo 1: Notas rápidas
-│ │ └── notes_screen.dart
-│ ├── imc/ # Módulo 2: Calculadora IMC
-│ │ └── imc_calculator_screen.dart
-│ ├── gallery/ # Módulo 3: Galería local
-│ │ └── gallery_screen.dart
-│ └── game/ # Módulo 4: Juego Par/Impar
-│ └── even_odd_game_screen.dart
-└── settings/ # Configuración y tema
-└── settings_screen.dart
-
+<img width="487" height="447" alt="image" src="https://github.com/user-attachments/assets/16865466-bddb-4210-9f35-90f81d6b19b9" />
 
 ## 🎮 Módulos del Kit Offline
 
@@ -57,24 +43,28 @@ lib/
 - Agregar nuevas notas con FAB
 - Eliminar notas individuales o en lote
 - Feedback visual con SnackBars
+![Imagen de WhatsApp 2025-09-26 a las 01 02 00_4b4705a1](https://github.com/user-attachments/assets/cac75ac6-e204-4af9-95b7-43a459ee103d)
 
 ### 2. ⚖️ Calculadora IMC
 - Formulario con validaciones avanzadas
 - Cálculo automático de Índice de Masa Corporal
 - Clasificación por categorías de peso
 - Botón de limpieza y reset
+  ![Imagen de WhatsApp 2025-09-26 a las 01 02 00_1001ca52](https://github.com/user-attachments/assets/bef9131d-c016-4979-bf8b-585327557457)
 
 ### 3. 🖼️ Galería Local
 - Grid de imágenes desde assets locales
 - Visualización ampliada con diálogo modal
 - Navegación táctil intuitiva
 - Manejo de errores elegante
+  ![Imagen de WhatsApp 2025-09-26 a las 01 17 39_86246e26](https://github.com/user-attachments/assets/c7109b6f-a3f9-4bfc-929b-bdc9188bf919)
 
 ### 4. 🎯 Juego Par o Impar
 - Juego interactivo contra la CPU
 - Sistema de marcador persistente
 - Generación aleatoria de números
 - Reinicio de estadísticas
+  ![Imagen de WhatsApp 2025-09-26 a las 01 02 00_92d6f59e](https://github.com/user-attachments/assets/c327d136-5cdb-4585-bf86-7625ac7cd7da)
 
 ## 🚀 Cómo Ejecutar el Proyecto
 
